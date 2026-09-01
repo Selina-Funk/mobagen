@@ -13,6 +13,8 @@ glm::vec2 AlignmentRule::computeForce(const std::vector<BoidView>& neighborhood,
     return averageVelocity;
   }
 
+  averageVelocity = boid.velocity;
+
   for (auto neighbor : neighborhood)
   {
     averageVelocity += neighbor.velocity;
