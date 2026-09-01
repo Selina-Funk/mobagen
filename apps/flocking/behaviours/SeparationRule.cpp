@@ -12,6 +12,19 @@ glm::vec2 SeparationRule::computeForce(const std::vector<BoidView>& neighborhood
 
   // begin solution
 
+  if (neighborhood.size() <= 0)
+  {
+    return separatingForce;
+  }
+
+  for (auto neighbor : neighborhood)
+  {
+    if (boid.position == neighbor.position) continue;
+
+    float force = desiredMinimalDistance / glm::length(neighbor.position - boid.position);
+
+    separatingForce += glm::normalize(neighbor.position - boid.position) * force;
+  }
 
   // end solution
 

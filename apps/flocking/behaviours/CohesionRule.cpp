@@ -23,9 +23,7 @@ glm::vec2 CohesionRule::computeForce(const std::vector<BoidView>& neighborhood, 
   }
   groupCenter /= neighborhood.size();
 
-  cohesionForce =  groupCenter - boid.position;
-
-  cohesionForce = glm::normalize(cohesionForce) * (glm::length(groupCenter - boid.position) /2);
+  cohesionForce = glm::normalize(groupCenter - boid.position) * getBaseWeightMultiplier();
 
   // end solution
 
