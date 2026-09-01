@@ -1,5 +1,6 @@
 #include "CohesionRule.h"
 #include <glm/glm.hpp>
+#include <iostream>
 
 glm::vec2 CohesionRule::computeForce(const std::vector<BoidView>& neighborhood, const BoidView& boid) {
   glm::vec2 cohesionForce(0.0F);
@@ -9,21 +10,22 @@ glm::vec2 CohesionRule::computeForce(const std::vector<BoidView>& neighborhood, 
 
   // begin solution
 
-  glm::vec2 groupCenter(0.0F, 0.0F);
-
   if (neighborhood.empty())
   {
     return cohesionForce;
   }
 
+  glm::vec2 groupCenter(0.0F, 0.0F);
+
   for (auto neighbor : neighborhood)
   {
     groupCenter += neighbor.position;
   }
-
   groupCenter /= neighborhood.size();
 
-  cohesionForce = glm::normalize((groupCenter - boid.position));
+  cohesionForce =  groupCenter - boid.position;
+
+  cohesionForce = glm::normalize(cohesionForce) * (glm::length(groupCenter - boid.position) /2);
 
   // end solution
 
