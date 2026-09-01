@@ -2,15 +2,20 @@
 #include <glm/glm.hpp>
 
 glm::vec2 AlignmentRule::computeForce(const std::vector<BoidView>& neighborhood, const BoidView& boid) {
-  glm::vec2 averageVelocity(0.f);
+  glm::vec2 averageVelocity(0.0F);
   // glm::vec2 can be divided by a float, which will divide each component of the vector by that float.
 
 
   // begin solution
 
-  for (int i = 0; i < neighborhood.size(); i++)
+  if (neighborhood.empty())
   {
-    averageVelocity += neighborhood[i].velocity;
+    return averageVelocity;
+  }
+
+  for (auto neighbor : neighborhood)
+  {
+    averageVelocity += neighbor.velocity;
   }
 
   averageVelocity = averageVelocity / static_cast<float>(neighborhood.size());
