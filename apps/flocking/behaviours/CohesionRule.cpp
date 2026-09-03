@@ -21,11 +21,11 @@ glm::vec2 CohesionRule::computeForce(const std::vector<BoidView>& neighborhood, 
   {
     groupCenter += neighbor.position;
   }
-  groupCenter /= neighborhood.size();
+  groupCenter /= static_cast<float>(neighborhood.size());
 
   float magnitude = glm::length(groupCenter - boid.position);
 
-  cohesionForce = glm::normalize(groupCenter - boid.position) * (magnitude * this->weight);
+  cohesionForce = glm::normalize(groupCenter - boid.position); // * magnitude;
 
   // end solution
 

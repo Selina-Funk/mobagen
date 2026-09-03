@@ -12,18 +12,26 @@ glm::vec2 SeparationRule::computeForce(const std::vector<BoidView>& neighborhood
 
   // begin solution
 
+  // Returns zero if there is no neighbors in the neighborhood
   if (neighborhood.size() <= 0)
   {
     return separatingForce;
   }
 
+  // Goes through each boid in the neighborhood
   for (auto neighbor : neighborhood)
   {
-    if (boid.position == neighbor.position) continue;
+    glm::vec2 targetVec = (boid.position - neighbor.position);
 
-    float force = desiredMinimalDistance / glm::length(neighbor.position - boid.position);
+    // Checks to make sure that the boid is not itself
+    if (glm::length(targetVec) < 0.0001f)
+    {
+      continue;
+    }
 
-    separatingForce += glm::normalize(neighbor.position - boid.position) * force * weight;
+    float force = desiredMinimalDistance / glm::length(targetVec);
+
+    separatingForce += glm::normalize(targetVec) * force;
   }
 
   // end solution
