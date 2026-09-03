@@ -11,22 +11,22 @@ glm::vec2 BoundedAreaRule::computeForce(const std::vector<BoidView>& neighborhoo
   // begin solution
 
   // Left
-  if (boid.position.x < desiredDistance)
+  if (boid.position.x < static_cast<float>(desiredDistance))
   {
-    force.x = (boid.position.x + desiredDistance) / desiredDistance;
+    force.x = (boid.position.x + static_cast<float>(desiredDistance)) / static_cast<float>(desiredDistance);
   }
   // Right
-  if (boid.position.x > (displaySize.x - desiredDistance)) {
-    force.x = (desiredDistance - boid.position.x) / desiredDistance;
+  if (boid.position.x > (displaySize.x - static_cast<float>(desiredDistance))) {
+    force.x = (static_cast<float>(desiredDistance) - boid.position.x) / static_cast<float>(desiredDistance);
   }
   // Top
-  if (boid.position.y < desiredDistance) {
-    force.y = (boid.position.y + desiredDistance) / desiredDistance;
+  if (boid.position.y < static_cast<float>(desiredDistance)) {
+    force.y = (boid.position.y + static_cast<float>(desiredDistance)) / static_cast<float>(desiredDistance);
   }
   // Bottom
-  else if (boid.position.y > (displaySize.y - desiredDistance))
+  else if (boid.position.y > (displaySize.y - static_cast<float>(desiredDistance)))
   {
-    force.y = (desiredDistance - boid.position.y) / desiredDistance;
+    force.y = (static_cast<float>(desiredDistance) - boid.position.y) / static_cast<float>(desiredDistance);
   }
   // end solution
 
