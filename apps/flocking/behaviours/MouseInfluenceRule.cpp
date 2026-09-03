@@ -10,13 +10,18 @@ glm::vec2 MouseInfluenceRule::computeForce(const std::vector<BoidView>& neighbor
 
   // begin solution
 
+  // Checks if the mouse is down
   if (ImGui::IsMouseDown(ImGuiMouseButton_Left))
   {
+    // Mouse position
     glm::vec2 mousePos = glm::vec2(ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y);
+
+    // Pulls the boids away from the mouse if repulsive
     if (isRepulsive)
     {
       force = glm::vec2(boid.position - mousePos);
     }
+    // Pulls the boids towards the mouse if attractive
     else
     {
       force = glm::vec2(mousePos - boid.position);

@@ -8,19 +8,23 @@ glm::vec2 AlignmentRule::computeForce(const std::vector<BoidView>& neighborhood,
 
   // begin solution
 
+  // Checks if the neighborhood is empty
   if (neighborhood.empty())
   {
     return averageVelocity;
   }
 
+  // Adds the boid's velocity to the average velocity
   averageVelocity = boid.velocity;
 
+  // Adds all neighbor velocities together
   for (auto neighbor : neighborhood)
   {
     averageVelocity += neighbor.velocity;
   }
 
-  averageVelocity = averageVelocity / static_cast<float>(neighborhood.size());
+  // Averages the vel out to align the boid
+  averageVelocity = averageVelocity / static_cast<float>(neighborhood.size() + 1);
 
   return averageVelocity;
   // end solution
