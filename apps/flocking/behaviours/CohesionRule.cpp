@@ -17,6 +17,7 @@ glm::vec2 CohesionRule::computeForce(const std::vector<BoidView>& neighborhood, 
 
   glm::vec2 groupCenter(0.0F, 0.0F);
 
+  // Gets the center of the group in the neighborhood
   for (auto neighbor : neighborhood)
   {
     groupCenter += neighbor.position;
@@ -25,7 +26,8 @@ glm::vec2 CohesionRule::computeForce(const std::vector<BoidView>& neighborhood, 
 
   float magnitude = glm::length(groupCenter - boid.position);
 
-  cohesionForce = glm::normalize(groupCenter - boid.position); // * magnitude;
+  // Normalizes the vector in the direction towards the groups position
+    cohesionForce = glm::normalize(groupCenter - boid.position) * magnitude;
 
   // end solution
 
