@@ -20,6 +20,12 @@ glm::vec2 CohesionRule::computeForce(const std::vector<BoidView>& neighborhood, 
   // Gets the center of the group in the neighborhood
   for (auto neighbor : neighborhood)
   {
+    if (glm::length(boid.position - neighbor.position) < 0.0001f)
+    {
+      continue;
+    }
+
+
     groupCenter += neighbor.position;
   }
   groupCenter /= static_cast<float>(neighborhood.size());

@@ -1,4 +1,6 @@
 #include "AlignmentRule.h"
+
+#include <iostream>
 #include <glm/glm.hpp>
 
 glm::vec2 AlignmentRule::computeForce(const std::vector<BoidView>& neighborhood, const BoidView& boid) {
@@ -15,11 +17,16 @@ glm::vec2 AlignmentRule::computeForce(const std::vector<BoidView>& neighborhood,
   }
 
   // Adds the boid's velocity to the average velocity
-  averageVelocity = boid.velocity;
+  averageVelocity += boid.velocity;
 
   // Adds all neighbor velocities together
   for (auto neighbor : neighborhood)
   {
+    if (&boid == &neighbor)
+    {
+      continue;
+    }
+
     averageVelocity += neighbor.velocity;
   }
 
