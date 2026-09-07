@@ -23,6 +23,10 @@ class Underpopulation : public Condition {
 public:
   bool Test(const AgentContext& context) override {
     // todo: implement the underpopulation condition
+    if (context.aliveNeighbors <= 1 && context.isAlive)
+    {
+      return true;
+    }
     throw std::logic_error("Underpopulation condition not implemented yet");
   }
 };
@@ -31,6 +35,10 @@ class Overpopulation : public Condition {
 public:
   bool Test(const AgentContext& context) override {
     // todo: implement the overpopulation condition
+    if (context.aliveNeighbors >= 4 && context.isAlive)
+    {
+      return true;
+    }
     throw std::logic_error("Overpopulation condition not implemented yet");
   }
 };
@@ -39,6 +47,10 @@ class Reproduction : public Condition {
 public:
   bool Test(const AgentContext& context) override {
     // todo: implement the reproduction condition
+    if (context.aliveNeighbors == 3 && !context.isAlive)
+    {
+      return true;
+    }
     throw std::logic_error("Reproduction condition not implemented yet");
   }
 };
@@ -50,6 +62,7 @@ public:
     // hint:
     //   use the context.world.SetNext() to set the next state of the cell to dead
     //   use the context.position to get the current cell's position
+    context.world.SetNext(context.position, context.isAlive);
     throw std::logic_error("Die action not implemented yet");
   }
 };
