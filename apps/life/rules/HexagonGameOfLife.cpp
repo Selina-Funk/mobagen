@@ -166,10 +166,17 @@ int HexagonGameOfLife::CountNeighbors(World& world, Point2D point) {
   //   above and two below, shifted by one column depending on the row parity
   //   world.Get() wraps around the borders (toroidal)
   // begin solution
-  //throw std::logic_error("CountNeighbors not implemented yet");
+
   int aliveNeighbors = 0;
 
-  return -1;
+  if (world.Get(Point2D{point.x - 1, point.y + 1})) aliveNeighbors++;
+  if (world.Get(Point2D{point.x - 1, point.y - 1})) aliveNeighbors++;
+  if (world.Get(Point2D{point.x, point.y + 1})) aliveNeighbors++;
+  if (world.Get(Point2D{point.x, point.y - 1})) aliveNeighbors++;
+  if (world.Get(Point2D{point.x + 1, point.y + 1})) aliveNeighbors++;
+  if (world.Get(Point2D{point.x + 1, point.y - 1})) aliveNeighbors++;
+
+  return aliveNeighbors;
 
   // end solution
 }

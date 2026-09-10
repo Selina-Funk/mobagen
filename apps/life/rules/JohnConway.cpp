@@ -29,7 +29,6 @@ public:
       return true;
     }
     return false;
-    //throw std::logic_error("Underpopulation condition not implemented yet");
   }
 };
 
@@ -42,7 +41,6 @@ public:
       return true;
     }
     return false;
-    //throw std::logic_error("Overpopulation condition not implemented yet");
   }
 };
 
@@ -55,7 +53,6 @@ public:
       return true;
     }
     return false;
-    //throw std::logic_error("Reproduction condition not implemented yet");
   }
 };
 
@@ -67,7 +64,6 @@ public:
     //   use the context.world.SetNext() to set the next state of the cell to dead
     //   use the context.position to get the current cell's position
     context.world.SetNext(context.position, false);
-    //throw std::logic_error("Die action not implemented yet");
   }
 };
 
@@ -76,7 +72,6 @@ public:
   void Execute(const AgentContext& context) override {
     // see hints in DieAction
     context.world.SetNext(context.position, true);
-    //throw std::logic_error("Born action not implemented yet");
   }
 };
 
@@ -85,7 +80,6 @@ public:
   void Execute(const AgentContext& context) override {
     // see hints in DieAction
     context.world.SetNext(context.position, true);
-    //throw std::logic_error("StayAlive action not implemented yet");
   }
 };
 
@@ -94,7 +88,6 @@ public:
   void Execute(const AgentContext& context) override {
     // see hints in DieAction
     context.world.SetNext(context.position, false);
-    //throw std::logic_error("StayDead action not implemented yet");
   }
 };
 }  // namespace conway
@@ -124,7 +117,6 @@ JohnConway::JohnConway() {
   // begin solution
   // note: log instead of throw - the constructor runs at app startup and at
   // every fixture load; throwing here would kill the process before it runs.
-  //SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "JohnConway: transitions and actions for alive and dead states not implemented yet");
 
   // end solution
 }
@@ -141,7 +133,9 @@ void JohnConway::Step(World& world) {
   // the next buffer via SetNext; whoever drives the simulation (the demo app's
   // Manager::step or the life-tests runner) calls world.SwapBuffers() right
   // AFTER this function returns. Never call SwapBuffers from inside a rule.
+
   // begin solution
+
   for (int y = 0; y < world.Height(); ++y) {
     for (int x = 0; x < world.Width(); ++x) {
       AgentContext context{world, {x, y}, world.Get({x, y}), CountNeighbors(world, {x, y})};
@@ -149,6 +143,7 @@ void JohnConway::Step(World& world) {
       machine.Update(context);
     }
   }
+
   // end solution
 }
 
@@ -177,7 +172,6 @@ int JohnConway::CountNeighbors(World& world, Point2D point) {
   }
 
   return numberAlive;
-  //throw std::logic_error("CountNeighbors not implemented yet");
 
   // end solution
 }
