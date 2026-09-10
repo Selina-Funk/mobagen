@@ -28,6 +28,7 @@ public:
     {
       return true;
     }
+    return false;
     //throw std::logic_error("Underpopulation condition not implemented yet");
   }
 };
@@ -40,6 +41,7 @@ public:
     {
       return true;
     }
+    return false;
     //throw std::logic_error("Overpopulation condition not implemented yet");
   }
 };
@@ -52,6 +54,7 @@ public:
     {
       return true;
     }
+    return false;
     //throw std::logic_error("Reproduction condition not implemented yet");
   }
 };
@@ -72,7 +75,7 @@ class BornAction : public Action {
 public:
   void Execute(const AgentContext& context) override {
     // see hints in DieAction
-    context.world.SetNext(context.position, false);
+    context.world.SetNext(context.position, true);
     //throw std::logic_error("Born action not implemented yet");
   }
 };
@@ -90,7 +93,7 @@ class StayDeadAction : public Action {
 public:
   void Execute(const AgentContext& context) override {
     // see hints in DieAction
-    context.world.SetNext(context.position, true);
+    context.world.SetNext(context.position, false);
     //throw std::logic_error("StayDead action not implemented yet");
   }
 };
