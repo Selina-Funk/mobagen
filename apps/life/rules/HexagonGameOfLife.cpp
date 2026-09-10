@@ -33,7 +33,11 @@ public:
     // todo: implement the underpopulation condition
     // hint: on the hex grid (B2/S34) a live cell is underpopulated below 3 neighbors
     //throw std::logic_error("Underpopulation condition not implemented yet");
-    return true;
+    if (context.aliveNeighbors < 3 && context.isAlive)
+    {
+      return true;
+    }
+    return false;
   }
 };
 
@@ -43,7 +47,11 @@ public:
     // todo: implement the overpopulation condition
     // hint: on the hex grid (B2/S34) a live cell is overpopulated above 4 neighbors
     //throw std::logic_error("Overpopulation condition not implemented yet");
-    return true;
+    if (context.aliveNeighbors > 4 && context.isAlive)
+    {
+      return true;
+    }
+    return false;
   }
 };
 
@@ -53,7 +61,11 @@ public:
     // todo: implement the reproduction condition
     // hint: on the hex grid (B2/S34) a dead cell is born with exactly 2 neighbors
     //throw std::logic_error("Reproduction condition not implemented yet");
-    return true;
+    if (context.aliveNeighbors == 2 && !context.isAlive)
+    {
+      return true;
+    }
+    return false;
   }
 };
 
@@ -65,6 +77,7 @@ public:
     //   use the context.world.SetNext() to set the next state of the cell to dead
     //   use the context.position to get the current cell's position
     //throw std::logic_error("Die action not implemented yet");
+    context.world.SetNext(context.position, false);
   }
 };
 
@@ -73,6 +86,7 @@ public:
   void Execute(const AgentContext& context) override {
     // see hints in DieAction
     //throw std::logic_error("Born action not implemented yet");
+    context.world.SetNext(context.position, true);
   }
 };
 
@@ -81,6 +95,7 @@ public:
   void Execute(const AgentContext& context) override {
     // see hints in DieAction
     //throw std::logic_error("StayAlive action not implemented yet");
+    context.world.SetNext(context.position, true);
   }
 };
 
@@ -89,6 +104,7 @@ public:
   void Execute(const AgentContext& context) override {
     // see hints in DieAction
     //throw std::logic_error("StayDead action not implemented yet");
+    context.world.SetNext(context.position, false);
   }
 };
 }  // namespace hexagon
@@ -108,6 +124,13 @@ HexagonGameOfLife::HexagonGameOfLife() {
   //   alive->AddTransition(std::make_shared<Underpopulation>(), dead, {die});
   //   dead->AddAction(std::make_shared<StayDeadAction>());
   // begin solution
+
+  alive->AddAction(std::make_shared<StayAliveAction>());
+  alive->AddTransition(std::make_shared<Underpopulation>(), dead, {die});
+  alive->AddTransition(std::make_shared<Overpopulation>(), dead, {die});
+
+  dead->AddAction(std::make_shared<StayDeadAction>());
+  dead->AddTransition(std::make_shared<Reproduction>(), alive, {born});
 
   //SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "HexagonGameOfLife: transitions and actions for alive and dead states not implemented yet");
 
@@ -144,6 +167,7 @@ int HexagonGameOfLife::CountNeighbors(World& world, Point2D point) {
   //   world.Get() wraps around the borders (toroidal)
   // begin solution
   //throw std::logic_error("CountNeighbors not implemented yet");
+  int aliveNeighbors = 0;
 
   return -1;
 
