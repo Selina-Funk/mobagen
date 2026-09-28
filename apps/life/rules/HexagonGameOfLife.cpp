@@ -159,7 +159,7 @@ int HexagonGameOfLife::CountNeighbors(World& world, Point2D point) {
   //throw std::logic_error("CountNeighbors not implemented yet");
 
   int aliveNeighbors = 0;
-  
+
   if (world.Get(Point2D{point.x - 1, point.y + 1})) aliveNeighbors++;
   if (world.Get(Point2D{point.x - 1, point.y - 1})) aliveNeighbors++;
   if (world.Get(Point2D{point.x, point.y + 1})) aliveNeighbors++;

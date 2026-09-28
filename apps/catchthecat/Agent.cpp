@@ -15,7 +15,7 @@ std::vector<Point2D> Agent::generatePath(CatWorld* w) {
 
   // bootstrap state
   auto catPos = w->getCat();
-  frontier.push(catPos);
+  frontier.emplace(catPos);
   frontierSet.insert(catPos);
   Point2D borderExit = {INT32_MAX, INT32_MAX};  // sentinel: no border found yet
 
