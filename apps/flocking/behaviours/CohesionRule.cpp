@@ -1,41 +1,33 @@
 #include "CohesionRule.h"
+#include "imgui.h"
 #include <glm/glm.hpp>
-#include <iostream>
 
-glm::vec2 CohesionRule::computeForce(const std::vector<BoidView>& neighborhood, const BoidView& boid) {
-  glm::vec2 cohesionForce(0.0F);
+glm::vec2 CohesionRule::computeForce(const std::vector<BoidView>& boids, int selfIndex) {
+  glm::vec2 cohesionForce(0.f);
 
   // glm::length(vec) returns the length of a vector,
   // glm::normalize(vec) returns the normalized vector (length 1) in the same direction as vec.
+  // boids contains every boid, including this one (boids[selfIndex]);
+  // use radius to scale the force so it is stronger when the boid is far from the center of mass
+  // the force magnitude should be between 0 and 1. 1 is when the CM is at the edge of the radius, and 0 is when it is at the center of mass. 
+  // Bonus: use spatial hashing to avoid O(n^2) complexity. Implement that on World.
 
   // begin solution
-
-  if (neighborhood.empty())
-  {
-    return cohesionForce;
-  }
-
-  glm::vec2 groupCenter(0.0F, 0.0F);
-
-  // Gets the center of the group in the neighborhood
-  for (auto neighbor : neighborhood)
-  {
-    if (glm::length(boid.position - neighbor.position) < 0.0001f)
-    {
-      continue;
-    }
-
-
-    groupCenter += neighbor.position;
-  }
-  groupCenter /= static_cast<float>(neighborhood.size());
-
-  float magnitude = glm::length(groupCenter - boid.position);
-
-  // Normalizes the vector in the direction towards the groups position
-    cohesionForce = glm::normalize(groupCenter - boid.position) * magnitude;
 
   // end solution
 
   return cohesionForce;
+}
+
+bool CohesionRule::drawImguiRuleExtra() {
+  bool valueHasChanged = false;
+  if (ImGui::DragFloat("Detection Radius", &radius, 1.f, 0.f, 500.f)) {
+    valueHasChanged = true;
+  }
+  return valueHasChanged;
+}
+
+void CohesionRule::drawRadius(const BoidView& boid, ImDrawList* dl) const {
+  dl->AddCircle({boid.position.x, boid.position.y}, radius,
+                IM_COL32(static_cast<int>(debugColor.r * 255), static_cast<int>(debugColor.g * 255), static_cast<int>(debugColor.b * 255), 64), 32);
 }
