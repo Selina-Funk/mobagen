@@ -8,7 +8,7 @@
 using namespace std;
 
 std::vector<Point2D> Agent::generatePath(CatWorld* w) {
-  unordered_map<Point2D, Point2D> cameFrom;  // to build the flowfield and build the path
+  unordered_map<Point2D, Point2D> cameFrom;  // to build the flowfield and build the path 1ST = LOCATION; 2ND = WHERE IT CAME FROM
   queue<Point2D> frontier;                   // to store next ones to visit
   unordered_set<Point2D> frontierSet;        // OPTIMIZATION to check faster if a point is in the queue
   unordered_map<Point2D, bool> visited;      // use .at() to get data, if the element dont exist [] will give you wrong results
@@ -19,8 +19,10 @@ std::vector<Point2D> Agent::generatePath(CatWorld* w) {
   frontier.emplace(catPos);
   frontierSet.insert(catPos);
   Point2D borderExit = {w->getWorldSideSize(), w->getWorldSideSize()};
+  bool earlyBreak = false;
 
-  while (!frontier.empty()) {
+  while (!frontier.empty())
+  {
     // get the current from frontier
     // remove the current from frontierset
     // mark current as visited
@@ -30,27 +32,43 @@ std::vector<Point2D> Agent::generatePath(CatWorld* w) {
     // enqueue the neighbors to frontier and frontierset
     // do this up to find a visitable border and break the loop
     currentPos = frontier.front();
+    frontier.pop();
     frontierSet.erase(currentPos);
     visited[currentPos] = true;
     vector<Point2D> neighbors = w->neighbors(currentPos);
 
     for (auto neighbor : neighbors)
     {
-      if (w->getContent(neighbor) == false)
+      if (!w->getContent(neighbor) && !visited.contains(neighbor)) // AND CHECK IF NEIGHBOR HAS BEEN VISISTED
       {
-        cameFrom[currentPos] = neighbor;
+        cameFrom[neighbor] = currentPos;
         frontier.emplace(neighbor);
         frontierSet.insert(neighbor);
         if (w->catWinsOnSpace(neighbor))
         {
+          currentPos = neighbor;
+          earlyBreak = true;
           break;
         }
       }
     }
+    if (earlyBreak)
+    {
+      break;
+    }
   }
 
-  if (borderExit.x != INT32_MAX || borderExit.y != INT32_MAX) {
+  if (borderExit.x != INT32_MAX || borderExit.y != INT32_MAX)
+  {
+    vector<Point2D> path;
+    Point2D startPos = currentPos;
 
+    while (cameFrom.contains(startPos))
+    {
+      path.push_back(cameFrom[startPos]);
+      startPos = cameFrom[startPos];
+    }
+    return path;
   }
 
   // if the border is not infinity, build the path from border to the cat using the camefrom map

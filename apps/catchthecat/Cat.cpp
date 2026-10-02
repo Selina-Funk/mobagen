@@ -5,6 +5,8 @@
 Point2D Cat::Move(CatWorld* world) {
   auto rand = Random::Range(0, 5);
   auto pos = world->getCat();
+  auto path = generatePath(world);
+  return path[path.size() - 1];
   switch (rand) {
     case 0:
       return CatWorld::NE(pos);
