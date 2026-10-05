@@ -5,7 +5,8 @@
 Point2D Cat::Move(CatWorld* world) {
   auto rand = Random::Range(0, 5);
   auto pos = world->getCat();
-  auto path = generatePath(world);
+  std::vector<Point2D> path = generatePath(world);
+  auto testPos = path[path.size() - 1];
   return path[path.size() - 1];
   switch (rand) {
     case 0:
