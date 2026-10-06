@@ -3,6 +3,14 @@
 
 #include <complex>
 
+enum Direction
+{
+  north,
+  east,
+  south,
+  west
+};
+
 Point2D Catcher::Move(CatWorld* world)
 {
   // Trick the cat --> Make cat resiliant to these traps
@@ -12,6 +20,9 @@ Point2D Catcher::Move(CatWorld* world)
     Point2D endPoint = pathway.at(placeInVector);
     Point2D desiredPoint;
     auto cat = world->getCat();
+    int numberBlocked = 0;
+    Direction moveDir;
+
     float manhattanDist = std::abs(cat.x - endPoint.x) + std::abs(cat.y - endPoint.y);
 
     if (manhattanDist <= 2 && !world->getContent(endPoint))
