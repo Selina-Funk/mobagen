@@ -1,10 +1,58 @@
 #include "Catcher.h"
 #include "World.h"
 
+#include <complex>
+
 Point2D Catcher::Move(CatWorld* world)
 {
+  // Trick the cat --> Make cat resiliant to these traps
+  // Create heuristic to trap the cat along a path
     std::vector<Point2D> pathway = generatePath(world);
-    Point2D p = pathway.at(0);
+    int placeInVector = 0;
+    Point2D endPoint = pathway.at(placeInVector);
+    Point2D desiredPoint;
     auto cat = world->getCat();
-    if (!(cat == p) && !world->getContent(p)) return p;
+    float manhattanDist = std::abs(cat.x - endPoint.x) + std::abs(cat.y - endPoint.y);
+
+    if (manhattanDist <= 2 && !world->getContent(endPoint))
+    {
+      if (cat != endPoint && !world->getContent(endPoint)) return endPoint;
+    }
+
+    while (desiredPoint != cat)
+    {
+      if (!world->getContent(Point2D(endPoint.x - 1, endPoint.y)))
+      {
+        desiredPoint = Point2D(endPoint.x - 1, endPoint.y);
+        return desiredPoint;
+      }
+      else if (!world->getContent(Point2D(endPoint.x + 1, endPoint.y)))
+      {
+        desiredPoint = Point2D(endPoint.x + 1, endPoint.y);
+        return desiredPoint;
+      }
+      placeInVector++;
+      if (placeInVector >= pathway.size()) break;
+      endPoint = pathway.at(placeInVector);
+    }
+
+    std::vector<Point2D> neighbors = world->neighbors(cat);
+    for (auto neighbor : neighbors)
+    {
+      if (!world->getContent(neighbor) && !std::ranges::contains(pathway, neighbor))
+      {
+        desiredPoint = neighbor;
+        return desiredPoint;
+      }
+    }
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    Point2D randomPoint;
+    while (!world->getContent(randomPoint))
+    {
+      std::uniform_real_distribution<> dis(-world->getWorldSideSize(), world->getWorldSideSize());
+      randomPoint = Point2D(dis(gen), dis(gen));
+    }
+  return randomPoint;
 }
