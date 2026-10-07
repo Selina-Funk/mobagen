@@ -18,7 +18,7 @@ Point2D Cat::Move(CatWorld* world) {
   std::vector<Point2D> path = generatePath(world);
   auto movePosition = path[path.size() - 1];
   int numberOfBlockedTiles = 0;
-  Direction dir;
+  Direction dir = southWest;
 
   for (auto neighbor : world->neighbors(pos)) {
     std::cout << neighbor.x << ", " << neighbor.y << std::endl;
