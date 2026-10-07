@@ -27,17 +27,20 @@ Point2D Catcher::Move(CatWorld* world)
 
     if (manhattanDist <= 2 && !world->getContent(endPoint))
     {
-      if (cat != endPoint && !world->getContent(endPoint)) return endPoint;
+      if (cat != endPoint && !world->getContent(endPoint))
+      {
+        return endPoint;
+      }
     }
 
     while (desiredPoint != cat)
     {
-      if (!world->getContent(Point2D(endPoint.x - 1, endPoint.y)))
+      if (!world->getContent(Point2D(endPoint.x - 1, endPoint.y)) && world->isValidPosition(Point2D(endPoint.x - 1, endPoint.y)))
       {
         desiredPoint = Point2D(endPoint.x - 1, endPoint.y);
         return desiredPoint;
       }
-      else if (!world->getContent(Point2D(endPoint.x + 1, endPoint.y)))
+      else if (!world->getContent(Point2D(endPoint.x + 1, endPoint.y)) && world->isValidPosition(Point2D(endPoint.x + 1, endPoint.y)))
       {
         desiredPoint = Point2D(endPoint.x + 1, endPoint.y);
         return desiredPoint;

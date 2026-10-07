@@ -16,7 +16,7 @@ Point2D Cat::Move(CatWorld* world) {
   auto rand = Random::Range(0, 5);
   auto pos = world->getCat();
   std::vector<Point2D> path = generatePath(world);
-  auto endPosition = path[path.size() - 1];
+  auto movePosition = path[path.size() - 1];
   int numberOfBlockedTiles = 0;
   Direction dir;
 
@@ -26,17 +26,20 @@ Point2D Cat::Move(CatWorld* world) {
 
   Point2D movementDir = (pos - path[path.size() - 1]);
   if (movementDir == Point2D(0, 1)) dir = northEast;
-  else if (movementDir == Point2D(1, 1)) dir = northWest;
+  else if (movementDir == Point2D(-1, 1)) dir = northWest;
   else if (movementDir == Point2D(-1, 0)) dir = east;
   else if (movementDir == Point2D(1, 0)) dir = west;
-  else if (movementDir == Point2D(0, -1)) dir = southWest;
-  else if (movementDir == Point2D(1, -1)) dir = southEast;
+  else if (movementDir == Point2D(1, 1)) dir = southWest;
+  else if (movementDir == Point2D(0, -1)) dir = southEast;
 
-  for (auto neighbor : world->neighbors(endPosition))
+  for (auto neighbor : world->neighbors(path[0]))
   {
-    if (world->getContent(neighbor))
+    if (world->isValidPosition(neighbor))
     {
-      numberOfBlockedTiles++;
+      if (world->getContent(neighbor))
+      {
+        numberOfBlockedTiles++;
+      }
     }
   }
 
@@ -44,21 +47,46 @@ Point2D Cat::Move(CatWorld* world) {
   {
     switch (dir) {
       case northEast:
-        if (!world->getContent(CatWorld::SW(pos))) return CatWorld::SW(pos);
+        if (!world->getContent(CatWorld::SW(pos)))
+        {
+          world->lastMove = CatWorld::SW(pos);
+          return CatWorld::SW(pos);
+        }
       case northWest:
-        if (!world->getContent(CatWorld::SE(pos))) return CatWorld::SE(pos);
+        if (!world->getContent(CatWorld::SE(pos)))
+        {
+          world->lastMove = CatWorld::SE(pos);
+          return CatWorld::SE(pos);
+        }
       case east:
-        if (!world->getContent(CatWorld::W(pos))) return CatWorld::W(pos);
+        if (!world->getContent(CatWorld::W(pos)))
+        {
+          world->lastMove = CatWorld::W(pos);
+          return CatWorld::W(pos);
+        }
       case west:
-        if (!world->getContent(CatWorld::E(pos))) return CatWorld::E(pos);
+        if (!world->getContent(CatWorld::E(pos)))
+        {
+          world->lastMove = CatWorld::E(pos);
+          return CatWorld::E(pos);
+        }
       case southWest:
-        if (!world->getContent(CatWorld::NE(pos))) return CatWorld::NE(pos);
+        if (!world->getContent(CatWorld::NE(pos)))
+        {
+          world->lastMove = CatWorld::NE(pos);
+          return CatWorld::NE(pos);
+        }
       case southEast:
-        if (!world->getContent(CatWorld::NW(pos))) return CatWorld::NW(pos);
+        if (!world->getContent(CatWorld::NW(pos)))
+        {
+          world->lastMove = CatWorld::NW(pos);
+          return CatWorld::NW(pos);
+        }
       default:
-        throw std::runtime_error("random out of range");
+        break;
     }
   }
 
+  world->lastMove =path[path.size() - 1];
   return path[path.size() - 1];
 }
