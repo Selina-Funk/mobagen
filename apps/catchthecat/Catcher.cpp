@@ -12,8 +12,26 @@ Point2D Catcher::Move(CatWorld* world)
     Point2D endPoint = pathway.at(placeInVector);
     Point2D desiredPoint;
     auto cat = world->getCat();
+    int blockedNeighbors = 0;
 
     float manhattanDist = std::abs(cat.x - endPoint.x) + std::abs(cat.y - endPoint.y);
+
+    for (auto neighbor : world->neighbors(cat))
+    {
+      if (world->getContent(neighbor))
+      {
+        blockedNeighbors++;
+      }
+    }
+
+    std::vector<Point2D> goodNeighbors;
+    if (blockedNeighbors > 3)
+    {
+      for (auto neighbor : world->neighbors(cat))
+      {
+        if (!world->getContent(neighbor) && world->isValidPosition(neighbor)) goodNeighbors.push_back(neighbor);
+      }
+    }
 
     if (manhattanDist <= 4 && !world->getContent(endPoint))
     {
