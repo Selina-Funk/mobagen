@@ -3,14 +3,6 @@
 
 #include <complex>
 
-enum Direction
-{
-  north,
-  east,
-  south,
-  west
-};
-
 Point2D Catcher::Move(CatWorld* world)
 {
   // Trick the cat --> Make cat resiliant to these traps
@@ -20,14 +12,12 @@ Point2D Catcher::Move(CatWorld* world)
     Point2D endPoint = pathway.at(placeInVector);
     Point2D desiredPoint;
     auto cat = world->getCat();
-    int numberBlocked = 0;
-    Direction moveDir;
 
     float manhattanDist = std::abs(cat.x - endPoint.x) + std::abs(cat.y - endPoint.y);
 
-    if (manhattanDist <= 2 && !world->getContent(endPoint))
+    if (manhattanDist <= 4 && !world->getContent(endPoint))
     {
-      if (cat != endPoint && !world->getContent(endPoint))
+      if (cat != endPoint)
       {
         return endPoint;
       }
@@ -53,7 +43,7 @@ Point2D Catcher::Move(CatWorld* world)
     std::vector<Point2D> neighbors = world->neighbors(cat);
     for (auto neighbor : neighbors)
     {
-      if (!world->getContent(neighbor) && !std::ranges::contains(pathway, neighbor))
+      if (!world->getContent(neighbor) && !std::ranges::contains(pathway, neighbor) && world->isValidPosition(neighbor))
       {
         desiredPoint = neighbor;
         return desiredPoint;
@@ -63,7 +53,7 @@ Point2D Catcher::Move(CatWorld* world)
     std::random_device rd;
     std::mt19937 gen(rd());
     Point2D randomPoint;
-    while (!world->getContent(randomPoint))
+    while (!world->getContent(randomPoint) && !world->isValidPosition(randomPoint))
     {
       std::uniform_real_distribution<> dis(-world->getWorldSideSize(), world->getWorldSideSize());
       randomPoint = Point2D(dis(gen), dis(gen));
