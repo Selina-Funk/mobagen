@@ -23,10 +23,13 @@ Point2D Cat::Move(CatWorld* world) {
 
   for (auto neighbor : world->neighbors(pos))
   {
-    if (world->catWinsOnSpace(neighbor) && !world->getContent(neighbor) && world->isValidPosition(neighbor))
+    if (world->isValidPosition(neighbor))
     {
-      world->lastMove = movePosition;
-      return neighbor;
+      if (world->catWinsOnSpace(neighbor) && !world->getContent(neighbor))
+      {
+        world->lastMove = movePosition;
+        return neighbor;
+      }
     }
   }
 
@@ -69,40 +72,58 @@ Point2D Cat::Move(CatWorld* world) {
   {
     switch (dir) {
       case northEast:
-        if (!world->getContent(CatWorld::SW(pos)) && world->isValidPosition(CatWorld::SW(pos)))
+        if (world->isValidPosition(CatWorld::SW(pos)))
         {
-          world->lastMove = CatWorld::SW(pos);
-          return CatWorld::SW(pos);
+          if (!world->getContent(CatWorld::SW(pos)))
+          {
+            world->lastMove = CatWorld::SW(pos);
+            return CatWorld::SW(pos);
+          }
         }
       case northWest:
-        if (!world->getContent(CatWorld::SE(pos)) && world->isValidPosition(CatWorld::SE(pos)))
+        if (world->isValidPosition(CatWorld::SE(pos)))
         {
-          world->lastMove = CatWorld::SE(pos);
-          return CatWorld::SE(pos);
+          if (!world->getContent(CatWorld::SE(pos)))
+          {
+            world->lastMove = CatWorld::SE(pos);
+            return CatWorld::SE(pos);
+          }
         }
       case east:
-        if (!world->getContent(CatWorld::W(pos)) && world->isValidPosition(CatWorld::W(pos)))
+        if ( world->isValidPosition(CatWorld::W(pos)))
         {
-          world->lastMove = CatWorld::W(pos);
-          return CatWorld::W(pos);
+          if (!world->getContent(CatWorld::W(pos)))
+          {
+            world->lastMove = CatWorld::W(pos);
+            return CatWorld::W(pos);
+          }
         }
       case west:
-        if (!world->getContent(CatWorld::E(pos)) && world->isValidPosition(CatWorld::E(pos)))
+        if ( world->isValidPosition(CatWorld::E(pos)))
         {
-          world->lastMove = CatWorld::E(pos);
-          return CatWorld::E(pos);
+          if (!world->getContent(CatWorld::E(pos)))
+          {
+            world->lastMove = CatWorld::E(pos);
+            return CatWorld::E(pos);
+          }
         }
       case southWest:
-        if (!world->getContent(CatWorld::NE(pos)) && world->isValidPosition(CatWorld::NE(pos)))
+        if (world->isValidPosition(CatWorld::NE(pos)))
         {
-          world->lastMove = CatWorld::NE(pos);
-          return CatWorld::NE(pos);
+          if (!world->getContent(CatWorld::NE(pos)))
+          {
+            world->lastMove = CatWorld::NE(pos);
+            return CatWorld::NE(pos);
+          }
         }
       case southEast:
-        if (!world->getContent(CatWorld::NW(pos)) && world->isValidPosition(CatWorld::NW(pos)))
+        if (world->isValidPosition(CatWorld::NW(pos)))
         {
-          world->lastMove = CatWorld::NW(pos);
-          return CatWorld::NW(pos);
+          if (!world->getContent(CatWorld::NW(pos)))
+          {
+            world->lastMove = CatWorld::NW(pos);
+            return CatWorld::NW(pos);
+          }
         }
       default:
         break;
