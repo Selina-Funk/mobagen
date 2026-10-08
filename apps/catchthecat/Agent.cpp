@@ -7,11 +7,29 @@
 
 using namespace std;
 
+std::vector<Point2D> Agent::getVisitableNeighbors(Point2D point, CatWorld* w)
+{
+  std::vector<Point2D> neighbors;
+  for (auto neighbor : w->neighbors(point))
+  {
+    if (w->isValidPosition(neighbor))
+    {
+      if (neighbor != w->getCat() && !w->getContent(neighbor))
+      {
+        neighbors.push_back(neighbor);
+      }
+    }
+  }
+  return neighbors;
+}
+
 std::vector<Point2D> Agent::generatePath(CatWorld* w) {
   unordered_map<Point2D, Point2D> cameFrom;  // to build the flowfield and build the path 1ST = LOCATION; 2ND = WHERE IT CAME FROM
   queue<Point2D> frontier;                   // to store next ones to visit
   unordered_set<Point2D> frontierSet;        // OPTIMIZATION to check faster if a point is in the queue
   unordered_map<Point2D, bool> visited;      // use .at() to get data, if the element dont exist [] will give you wrong results
+  int shortestValue = 1000;
+  Point2D shortestPoint;
 
   // bootstrap state
   auto catPos = w->getCat();
@@ -34,7 +52,7 @@ std::vector<Point2D> Agent::generatePath(CatWorld* w) {
     frontier.pop();
     frontierSet.erase(currentPos);
     visited[currentPos] = true;
-    vector<Point2D> neighbors = w->neighbors(currentPos);
+    vector<Point2D> neighbors = getVisitableNeighbors(currentPos, w);
 
     for (auto neighbor : neighbors)
     {
@@ -44,16 +62,12 @@ std::vector<Point2D> Agent::generatePath(CatWorld* w) {
         frontier.emplace(neighbor);
         frontierSet.insert(neighbor);
         if (w->catWinsOnSpace(neighbor))
+        if (std::min((w->getWorldSideSize()/2 - std::abs(catPos.x)), (w->getWorldSideSize()/2 - std::abs(catPos.y))) < shortestValue)
         {
-          currentPos = neighbor;
-          earlyBreak = true;
-          break;
+          shortestValue = std::min((w->getWorldSideSize()/2 - std::abs(catPos.x)), (w->getWorldSideSize()/2 - std::abs(catPos.y)));
+          shortestPoint = neighbor;
         }
       }
-    }
-    if (earlyBreak)
-    {
-      break;
     }
   }
 
@@ -63,8 +77,8 @@ std::vector<Point2D> Agent::generatePath(CatWorld* w) {
   if (borderExit.x != INT32_MAX || borderExit.y != INT32_MAX)
   {
     vector<Point2D> path;
-    path.push_back(currentPos);
-    Point2D startPos = currentPos;
+    path.push_back(shortestPoint);
+    Point2D startPos = shortestPoint;
 
     while (cameFrom.contains(startPos))
     {
