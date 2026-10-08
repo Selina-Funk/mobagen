@@ -57,6 +57,7 @@ Point2D Catcher::Move(CatWorld* world)
             if (!world->getContent(CatWorld::NE(cat)))
             {
               world->lastMove = CatWorld::NE(cat);
+              world->lastMove = CatWorld::NE(cat);
               return CatWorld::NE(cat);
             }
           }
@@ -65,6 +66,7 @@ Point2D Catcher::Move(CatWorld* world)
           {
             if (!world->getContent(CatWorld::NW(cat)))
             {
+              world->lastMove = CatWorld::NW(cat);
               world->lastMove = CatWorld::NW(cat);
               return CatWorld::NW(cat);
             }
@@ -75,6 +77,7 @@ Point2D Catcher::Move(CatWorld* world)
             if (!world->getContent(CatWorld::E(cat)))
             {
               world->lastMove = CatWorld::E(cat);
+              world->lastMove = CatWorld::E(cat);
               return CatWorld::E(cat);
             }
           }
@@ -83,6 +86,7 @@ Point2D Catcher::Move(CatWorld* world)
           {
             if (!world->getContent(CatWorld::W(cat)))
             {
+              world->lastMove = CatWorld::W(cat);
               world->lastMove = CatWorld::W(cat);
               return CatWorld::W(cat);
             }
@@ -93,6 +97,7 @@ Point2D Catcher::Move(CatWorld* world)
             if (!world->getContent(CatWorld::SW(cat)))
             {
               world->lastMove = CatWorld::SW(cat);
+              world->lastMove = CatWorld::SW(cat);
               return CatWorld::SW(cat);
             }
           }
@@ -101,6 +106,7 @@ Point2D Catcher::Move(CatWorld* world)
           {
             if (!world->getContent(CatWorld::SE(cat)))
             {
+              world->lastMove = CatWorld::SE(cat);
               world->lastMove = CatWorld::SE(cat);
               return CatWorld::SE(cat);
             }
@@ -114,6 +120,7 @@ Point2D Catcher::Move(CatWorld* world)
     {
       if (cat != endPoint)
       {
+        world->lastMove = endPoint;
         return endPoint;
       }
     }
@@ -123,11 +130,13 @@ Point2D Catcher::Move(CatWorld* world)
       if (!world->getContent(Point2D(endPoint.x - 1, endPoint.y)) && world->isValidPosition(Point2D(endPoint.x - 1, endPoint.y)))
       {
         desiredPoint = Point2D(endPoint.x - 1, endPoint.y);
+        world->lastMove = desiredPoint;
         return desiredPoint;
       }
       else if (!world->getContent(Point2D(endPoint.x + 1, endPoint.y)) && world->isValidPosition(Point2D(endPoint.x + 1, endPoint.y)))
       {
         desiredPoint = Point2D(endPoint.x + 1, endPoint.y);
+        world->lastMove = desiredPoint;
         return desiredPoint;
       }
       placeInVector++;
@@ -141,6 +150,7 @@ Point2D Catcher::Move(CatWorld* world)
       if (!world->getContent(neighbor) && !std::ranges::contains(pathway, neighbor) && world->isValidPosition(neighbor))
       {
         desiredPoint = neighbor;
+        world->lastMove = desiredPoint;
         return desiredPoint;
       }
     }
@@ -151,5 +161,6 @@ Point2D Catcher::Move(CatWorld* world)
       std::uniform_real_distribution<> dis(-world->getWorldSideSize(), world->getWorldSideSize());
       randomPoint = Point2D(dis(gen), dis(gen));
     }
+    world->lastMove = randomPoint;
   return randomPoint;
 }

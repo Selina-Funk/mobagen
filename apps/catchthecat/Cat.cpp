@@ -58,6 +58,7 @@ Point2D Cat::Move(CatWorld* world) {
 
   if (availableNeighbors.capacity() < 4)
   {
+    world->lastMove = availableNeighbors[dis(gen)];
     return availableNeighbors[dis(gen)];
   }
 
